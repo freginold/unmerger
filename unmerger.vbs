@@ -1,11 +1,11 @@
-Sub UnmergeTest()
+Sub unmerger()
 
-    Dim thisCell, thisRow, thisCol, numRows, nextCellDown, alertsOn, mergeRange, rowHeight, prevCol, currentCell
+    Dim thisCell, origCell, thisRow, thisCol, numRows, nextCellDown, alertsOn, mergeRange, rowHeight, prevCol, nextCol, currentCell
     Dim values()
-    Dim segments, x, i, a
+    Dim segments, empties, x, i, a
     
         
-    ' ------ get & format address for active cell. may not need later ------
+    ' ------ get & format address for active cell ------
     
     thisCell = ""
     thisCol = ""
@@ -21,11 +21,10 @@ Sub UnmergeTest()
     
     rowHeight = ActiveCell.rowHeight
     
-    
     nextCellDown = thisCol & (CInt(thisRow) + 1)
     
     
-    ' ------ see how many rows in selected cell ------
+    ' see how many rows in selected cell
     
     numRows = 0
     segments = Split(ActiveCell.Value, Chr(10))
@@ -54,7 +53,7 @@ Sub UnmergeTest()
     Range(thisCell).Value = values(1)
     
     ' then merge the preceeding cells (w/o alert showing)
-    '   *** have to merge A10 through A12, B10 through B12, etc. up through the preceeding column ***
+    ' have to merge A10 through A12, B10 through B12, etc. up through the preceeding column
     
     'mergeRange = "A" & thisRow & ":" & thisCol & (CInt(thisRow) + numRows)
     
@@ -62,6 +61,7 @@ Sub UnmergeTest()
     
     prevCol = ""
     Set currentCell = ActiveCell
+    Set origCell = ActiveCell
     
     Do Until prevCol = "A"
         ' get previous column
@@ -84,7 +84,35 @@ Sub UnmergeTest()
         Range(thisCol & (CInt(thisRow) + i)).rowHeight = (rowHeight) / (numRows + 1)
     Next
     
+    ' using format painter to set succeeding cells back to their original height
+    empties = 0
+    
+    Set currentCell = ActiveCell
+    Do Until empties > 2
+        ' get next column
+        segments = Split(currentCell.Next.Address, "$")
+        a = 0
+        For Each x In segments
+            If a = 1 Then nextCol = x
+            a = a + 1
+        Next
+        
+        Set currentCell = currentCell.Next
+        
+        ' merge next column
+        mergeRange = nextCol & thisRow & ":" & nextCol & (CInt(thisRow) + numRows)
+        Range(mergeRange).Merge
+        If IsEmpty(currentCell) Then
+            empties = empties + 1
+        Else
+            empties = 0
+        End If
+    Loop
+    
+    origCell.Select
     If alertsOn Then Application.DisplayAlerts = True
     
+    Set origCell = Nothing
+    Set currentCell = Nothing
     
 End Sub
