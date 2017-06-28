@@ -13,4 +13,5 @@ Cells to the left of the affected cell will retain their row height and formatti
 - Using this macro on multiple columns in the same row will probably not work as expected. It's best to not use it more than once on the same row.
 
 ### Tested successfully in:
+- Excel 2007 / Windows 7
 - Excel 2013 / Windows 7
