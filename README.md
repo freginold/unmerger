@@ -1,4 +1,7 @@
 # unmerger
+
+_**Update:** Microsoft has [announced plans](https://techcommunity.microsoft.com/blog/windows-itpro-blog/vbscript-deprecation-timelines-and-next-steps/4148301) to gradually deprecate VBScript in Windows. There is no exact sunset date yet, but once it occurs this macro will not function._
+
 unmerger is an Excel macro to separate line-delimited values in one cell into their own individual cells, without breaking up the formatting of the preceeding cells in the row.  Here is an example of what this macro does:
 
 ![screen shot](https://github.com/freginold/unmerger/blob/master/ss.png)
